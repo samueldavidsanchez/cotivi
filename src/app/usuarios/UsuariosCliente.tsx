@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import {
   UserPlus, Pencil, Trash2, ShieldCheck, User as UserIcon,
-  Loader2, X, AlertCircle, CheckCircle2,
+  Loader2, X, AlertCircle, CheckCircle2, Eye, EyeOff,
 } from 'lucide-react'
 
 export interface Usuario {
@@ -190,6 +190,7 @@ function UsuarioModal({
   const [form, setForm] = useState<FormState>(initial)
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
+  const [showPassword, setShowPassword] = useState(false)
 
   const isEdit = Boolean(usuarioId)
 
@@ -269,14 +270,26 @@ function UsuarioModal({
             <label className="block text-sm font-medium text-[#282828]">
               Contraseña {isEdit && <span className="text-gray-400 font-normal">(dejar en blanco para no cambiar)</span>}
             </label>
-            <Input
-              type="password"
-              value={form.password}
-              onChange={(e) => setForm({ ...form, password: e.target.value })}
-              placeholder="••••••••"
-              required={requirePassword}
-              minLength={6}
-            />
+            <div className="relative">
+              <Input
+                type={showPassword ? 'text' : 'password'}
+                value={form.password}
+                onChange={(e) => setForm({ ...form, password: e.target.value })}
+                placeholder="••••••••"
+                required={requirePassword}
+                minLength={6}
+                className="pr-10"
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword((v) => !v)}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                title={showPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'}
+                aria-label={showPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'}
+              >
+                {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+              </button>
+            </div>
           </div>
 
           <div className="space-y-1.5">
