@@ -1,11 +1,12 @@
+'use client'
 import Image from 'next/image'
 import Link from 'next/link'
 import { FileText, Package, PlusCircle, Users } from 'lucide-react'
+import { useSession } from 'next-auth/react'
 import UserWidget from './UserWidget'
-import { auth } from '@/auth'
 
-export default async function Navbar() {
-  const session = await auth()
+export default function Navbar() {
+  const { data: session } = useSession()
   const isAdmin = session?.user?.rol === 'admin'
 
   return (
