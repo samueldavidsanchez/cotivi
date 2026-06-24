@@ -1,6 +1,7 @@
 import { db } from '@/lib/db'
 import { products } from '@/lib/schema'
 import { asc } from 'drizzle-orm'
+import { auth } from '@/auth'
 import Navbar from '@/components/Navbar'
 import IndicadoresBar from '@/components/IndicadoresBar'
 import CatalogoCliente from './CatalogoCliente'
@@ -9,6 +10,8 @@ import { Producto } from '@/types'
 export const dynamic = 'force-dynamic'
 
 export default async function CatalogoPage() {
+  const session = await auth()
+  const isAdmin = session?.user?.rol === 'admin'
   const rows = await db.select().from(products).orderBy(asc(products.categoria), asc(products.nombre))
   const parsed: Producto[] = rows.map((p) => ({
     ...p,
@@ -26,7 +29,7 @@ export default async function CatalogoPage() {
       <Navbar />
       <IndicadoresBar />
       <div className="flex-1 max-w-7xl mx-auto w-full px-4 py-6">
-        <CatalogoCliente productos={parsed} />
+        <CatalogoCliente productos={parsed} isAdmin={isAdmin} />
       </div>
     </div>
   )
