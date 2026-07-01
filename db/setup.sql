@@ -4,15 +4,15 @@
 -- Este archivo solo agrega la secuencia y el trigger de numeración
 -- ============================================================
 
--- Secuencia para numeración correlativa de cotizaciones
-create sequence if not exists quote_correlativo_seq start 1;
+-- Secuencia para numeración correlativa de cotizaciones (arranca en 01633)
+create sequence if not exists quote_correlativo_seq start 1633;
 
 -- Trigger: asigna número correlativo al insertar una cotización
 create or replace function set_quote_number()
 returns trigger as $$
 begin
   new.correlativo = nextval('quote_correlativo_seq');
-  new.numero = 'COT-' || lpad(new.correlativo::text, 3, '0');
+  new.numero = 'COT-' || lpad(new.correlativo::text, 5, '0');
   return new;
 end;
 $$ language plpgsql;

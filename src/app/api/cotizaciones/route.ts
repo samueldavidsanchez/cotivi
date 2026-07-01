@@ -13,8 +13,9 @@ export async function POST(req: NextRequest) {
       .select({ maxCorrelativo: max(quotes.correlativo) })
       .from(quotes)
 
-    const correlativo = Number(maxCorrelativo ?? 0) + 1
-    const numero = `COT-${String(correlativo).padStart(3, '0')}`
+    // La secuencia arranca en 01633 (numeración heredada); nunca retrocede.
+    const correlativo = Math.max(Number(maxCorrelativo ?? 0) + 1, 1633)
+    const numero = `COT-${String(correlativo).padStart(5, '0')}`
 
     const [quote] = await db
       .insert(quotes)

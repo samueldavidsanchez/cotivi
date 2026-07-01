@@ -6,13 +6,13 @@ config({ path: '.env.local' })
 const sql = neon(process.env.DATABASE_URL)
 
 const statements = [
-  `create sequence if not exists quote_correlativo_seq start 1`,
+  `create sequence if not exists quote_correlativo_seq start 1633`,
 
   `create or replace function set_quote_number()
    returns trigger as $$
    begin
      new.correlativo = nextval('quote_correlativo_seq');
-     new.numero = 'COT-' || lpad(new.correlativo::text, 3, '0');
+     new.numero = 'COT-' || lpad(new.correlativo::text, 5, '0');
      return new;
    end;
    $$ language plpgsql`,
